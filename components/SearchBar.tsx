@@ -1,5 +1,5 @@
 ﻿"use client";
-import { Loader } from "lucide-react";
+import { scrapeAndStoreProduct } from "@/lib/actions";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
@@ -28,7 +28,7 @@ const isValidAmazonProductURL = (url: string) => {
 const SearchBar = (props: Props) => {
   const [searchPrompt, setSearchPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const handleSubmit = (
+  const handleSubmit = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
@@ -38,9 +38,13 @@ const SearchBar = (props: Props) => {
 
     try {
       setIsLoading(true);
-    } catch (error) {
-      toast.error("Something went wrong" + error);
+      toast.loading("Scraping...");
+      // scrape the product page
+      const product = await scrapeAndStoreProduct(searchPrompt);
+    } catch (error: any) {
+      console.log("Something went wrong" + error.message);
     } finally {
+      toast.dismiss();
       setIsLoading(false);
     }
   };
@@ -53,7 +57,7 @@ const SearchBar = (props: Props) => {
         onChange={(e) => setSearchPrompt(e.target.value)}
       />
       <Button disabled={isLoading} type="submit" onClick={handleSubmit}>
-        {isLoading ? <Loader className="w-4 h-4 animate-spin" /> : "Search"}
+        Search
       </Button>
     </div>
   );
