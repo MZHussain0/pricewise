@@ -8,9 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getAllProducts } from "@/lib/actions";
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const allProducts = await getAllProducts();
   return (
     <>
       <section className="px-6 md:px-20 py-24">
@@ -46,18 +50,33 @@ export default function Home() {
         <h2 className="text-2xl font-bold">Trending</h2>
 
         <div className="flex flex-wrap gap-x-8 gap-y-16">
-          {["Apple", "Samsung", "Xiaomi"].map((item) => (
-            <Card key={item} title={item}>
-              <CardHeader>
-                <CardTitle>{item}</CardTitle>
-                <CardDescription>Card Description</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>Card Content</p>
-              </CardContent>
-              <CardFooter>
-                <p>Card Footer</p>
-              </CardFooter>
+          {allProducts?.map((item) => (
+            <Card key={item._id} title={item.title} className="w-96">
+              <Link href={`/products/${item._id}`}>
+                <CardHeader>
+                  <CardTitle className="text-lg">{item.title}</CardTitle>
+                  <CardDescription></CardDescription>
+                </CardHeader>
+                <CardContent className="flex items-center justify-center">
+                  <Image
+                    alt={item.title}
+                    src={item.image}
+                    width={250}
+                    height={250}
+                    className="object-contain max-h-[250px] w-full h-full bg-transparent"
+                  />
+                </CardContent>
+                <CardFooter className="flex items-center justify-between">
+                  <p className="text-muted-foreground uppercase text-base">
+                    {item.category}
+                  </p>
+
+                  <p className="text-lg font-semibold text-brand">
+                    <span>{item?.currency}</span>{" "}
+                    <span>{item?.currentPrice}</span>
+                  </p>
+                </CardFooter>
+              </Link>
             </Card>
           ))}
         </div>
