@@ -59,7 +59,7 @@ const page = async ({ params }: Props) => {
             <div className="flex flex-col gap-3">
               <p className="text-2xl font-semibold">{product.title}</p>
               <Link
-                href={product.url}
+                href={product.productUrl}
                 className="text-brand opacity-50 hover:text-brand-accent hover:underline hover:opacity-60"
                 target="_blank">
                 Visit Product
