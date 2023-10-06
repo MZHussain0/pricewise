@@ -11,7 +11,6 @@ import {
 import { NextResponse } from "next/server";
 import { generateEmailBody, sendEmail } from "./../../../lib/nodemailer/index";
 
-export const maxDuration = 5;
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
